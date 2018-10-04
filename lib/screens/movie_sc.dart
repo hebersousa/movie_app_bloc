@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app_bloc/api.dart';
 import 'package:movie_app_bloc/models/movie.dart';
-import 'package:movie_app_bloc/screens/movie_detail.dart';
+import 'package:movie_app_bloc/screens/movie_detail/movie_detail_sc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class MovieScreen extends StatefulWidget{
@@ -149,7 +149,7 @@ TextEditingController txtController = TextEditingController();
          children: <Widget>[
            ListTile(
             title:Text(movie.title, style: TextStyle(color: Theme.of(context).accentColor)),
-            leading: CachedNetworkImage(imageUrl: "https://image.tmdb.org/t/p/w92${movie.poster_path}",
+            leading: CachedNetworkImage(imageUrl: movie.poster_path,
               placeholder: Icon(Icons.movie_creation),
               height: 60.0,
             ),

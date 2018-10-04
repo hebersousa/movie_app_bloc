@@ -3,23 +3,13 @@ import 'dart:async';
 import 'package:movie_app_bloc/models/movie.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:dio/dio.dart';
 
 
 class API {
 
   var urlQuery = "https://api.themoviedb.org/3/search/movie?api_key=$API_KEY";
-  var API_URL = "https://api.themoviedb.org/3/";
+  var API_URL =  "https://api.themoviedb.org/3/";
 
-
-  final Dio dio = Dio();
-  CancelToken cancelToken = CancelToken();
-
-
-  void cancelar(){
-    cancelToken.cancel("cancelled");
-
-  }
 
   Future<List<Movie>> get(String query, int page) async{
 
@@ -41,7 +31,7 @@ class API {
 
   Future<List<String>> listImages(int idMovie) async{
 
-    var url = "${API_URL}movie/${idMovie}/images?api_key=$API_KEY";
+    var url = "${API_URL}movie/$idMovie/images?api_key=$API_KEY";
 
     return await http.get(url).then( (res){
       Map map = json.decode(res.body);

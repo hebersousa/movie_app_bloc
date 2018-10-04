@@ -14,8 +14,6 @@ class MoviesBloc {
   final _loadingController = BehaviorSubject<bool>(seedValue: false);
 
 
-
-
   bool _endLoading = false;
 
   int _page = 0;

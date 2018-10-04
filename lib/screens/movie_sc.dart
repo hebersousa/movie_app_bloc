@@ -3,6 +3,7 @@ import 'package:movie_app_bloc/api.dart';
 import 'package:movie_app_bloc/models/movie.dart';
 import 'package:movie_app_bloc/screens/movie_detail/movie_detail_sc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:movie_app_bloc/application_state_provider.dart';
 
 class MovieScreen extends StatefulWidget{
 
@@ -12,59 +13,15 @@ class MovieScreen extends StatefulWidget{
 
 class _MovieScreenState extends State<MovieScreen>{
 
-  int _page;
-  String _busca ="";
-  List<Movie> _movies = [];
-  API _api = new API();
 TextEditingController txtController = TextEditingController();
 
-  bool isLoading = false;
-  bool fimCarregamento = false;
 
-    void buscaDados(var busca) async {
-      setState((){
-        _busca = busca;
-        _movies =[];
-        fimCarregamento = false;
-      });
 
-      if(busca.length > 0 ) {
-        setState(() {
-            _page = 0;
-        });
-        loadMore();
-      }
-    }
+    var progressIndicator = Padding(
+        padding: const EdgeInsets.all(10.0),
+        child:new SizedBox(child: CircularProgressIndicator(strokeWidth: 2.0,), height: 15.0,width: 15.0,));
 
-    void loadMore() async{
 
-      if(!isLoading && _busca.length > 0) {
-        setState(() {
-          isLoading = true;
-          _page++;
-        });
-
-        var list = await _api.get(_busca, _page);
-
-        if (list.isEmpty)
-          fimCarregamento = true;
-
-          setState(() {
-            isLoading = false;
-            if(_busca.length >0)
-              _movies.addAll(list);
-
-          });
-      }
-    }
-
-    Widget buildProgressIndicator(){
-       return Center(child:
-          fimCarregamento?Padding(padding: const EdgeInsets.all(10.0),)
-          : Padding(
-              padding: const EdgeInsets.all(10.0),
-              child:new SizedBox(child: CircularProgressIndicator(strokeWidth: 2.0,), height: 15.0,width: 15.0,)));
-    }
 
     @override
     Widget build(BuildContext context){
@@ -78,7 +35,8 @@ TextEditingController txtController = TextEditingController();
             border: InputBorder.none
         ),
         onChanged: (valor){
-          buscaDados(valor);
+          ApplicationStateProvider.of(context).moviesBloc.busca = valor;
+
         },
       );
 
@@ -99,7 +57,7 @@ TextEditingController txtController = TextEditingController();
               onPressed: (){
               setState((){
                 txtController.text = '';
-                buscaDados('');
+                ApplicationStateProvider.of(context).moviesBloc.busca = '';
               });
               },)
           ],
@@ -114,33 +72,68 @@ TextEditingController txtController = TextEditingController();
               Container(  padding: const EdgeInsets.all(10.0),
                           child: textField
               ),
-              Flexible(child: buildResults(context))
+              Flexible(child: buildResultsStream())
         ]) ,
       );
     }
 
-  Widget buildResults(BuildContext context){
-      if(_movies.isEmpty && !isLoading){
-        return new Center(child: Icon(Icons.movie_creation,size: 200.0,color: Colors.grey[300],));
-      }else{
-        return ListView.builder(
 
-          itemCount:  _movies.length+1,
-          itemBuilder: (context, index) {
-            if(index == _movies.length && !fimCarregamento ) {
-              loadMore();
-            }
+  Widget buildProgressIndicatorStream(){
 
-            if(index == _movies.length )
-                return buildProgressIndicator();
-            else
+      return StreamBuilder<bool>(
+        stream: ApplicationStateProvider.of(context).moviesBloc.loadingStream,
+        builder: (_, snapshot){
 
-             return buildItem(_movies[index]);
+          if(snapshot.hasData && snapshot.data)
+              return Center(child: progressIndicator);
+          else
+            return Padding(padding: const EdgeInsets.all(10.0),);
 
-          },
-        );
+        },
+      );
+  }
 
-      }
+
+
+  Widget buildResultsStream(){
+
+    return StreamBuilder<List<Movie>>(
+      stream: ApplicationStateProvider.of(context).moviesBloc.moviesStream,
+      builder: (_,snapshot){
+
+        if(snapshot.hasError){
+          return new Center(child: Icon(Icons.movie_creation,size: 200.0,color: Colors.grey[300],));
+
+
+        }else if(snapshot.hasData){
+
+          return ListView.builder(
+
+            itemCount:  snapshot.data.length + 1,
+            itemBuilder: (context, index) {
+
+              List<Movie> movies = snapshot.data;
+
+              if(index < movies.length  ) {
+                return buildItem( movies[index] );
+              }
+              else
+              {
+                ApplicationStateProvider.of(context).moviesBloc.loadMore();
+                return buildProgressIndicatorStream();
+              }
+
+            },
+          );
+        }else{
+          return Container();
+        }
+
+
+      },
+
+    );
+
   }
 
   Widget buildItem(Movie movie){

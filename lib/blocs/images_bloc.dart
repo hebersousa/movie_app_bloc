@@ -53,4 +53,12 @@ class ImagesBloc {
 
         }
   }
+
+  void close(){
+
+    _imagesController.close();
+    _idController.close();
+
+
+  }
 }

@@ -68,6 +68,7 @@ Widget build( BuildContext context){
         new RefreshIndicator(
           onRefresh: onrefresh,
           child: new SingleChildScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
             child: new Padding(
               padding: const EdgeInsets.fromLTRB(10.0, 150.0,10.0,8.0),
               child: Column(

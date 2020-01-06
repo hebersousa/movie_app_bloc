@@ -19,9 +19,9 @@ class MovieDetailBottomScreen extends StatelessWidget {
 
     Widget getImage(url){
       return CachedNetworkImage(
-        imageUrl: url,
-        placeholder: iconPlaceHolder,
-        height: 60.0,
+          imageUrl: url,
+          placeholder: (_,url)=> iconPlaceHolder,
+          height: 60.0,
       );
     }
 

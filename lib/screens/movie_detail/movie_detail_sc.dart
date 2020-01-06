@@ -41,7 +41,7 @@ Widget build( BuildContext context){
         new Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text("${movie.vote_average}",style: TextStyle(fontSize: 50.0, fontWeight: FontWeight.bold ),),
-            movie.poster_path == null ? Icon(Icons.movie) : Image.network('https://image.tmdb.org/t/p/w92'+movie.poster_path),
+            movie.poster_path == null ? Icon(Icons.movie) : Image.network(movie.poster_path),
           ],
         ),
         SizedBox(height: 10.0,),

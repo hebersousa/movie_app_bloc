@@ -142,9 +142,10 @@ TextEditingController txtController = TextEditingController();
          children: <Widget>[
            ListTile(
             title:Text(movie.title, style: TextStyle(color: Theme.of(context).accentColor)),
-            leading: CachedNetworkImage(imageUrl: movie.poster_path,
-              placeholder: Icon(Icons.movie_creation),
-              height: 60.0,
+            leading: CachedNetworkImage(
+                imageUrl: "${movie.poster_path}",
+                width: 60.0,
+                placeholder: (context, url) => Icon(Icons.movie_creation),
             ),
             onTap: (){
               Navigator.of(context).push(

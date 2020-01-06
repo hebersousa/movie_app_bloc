@@ -9,9 +9,9 @@ class MoviesBloc {
 
   API _api = API();
 
-  final _moviesController = BehaviorSubject<List<Movie>>(seedValue: []);
-  final _buscaController = BehaviorSubject<String>(seedValue: '');
-  final _loadingController = BehaviorSubject<bool>(seedValue: false);
+  final _moviesController = BehaviorSubject<List<Movie>>.seeded([]);
+  final _buscaController = BehaviorSubject<String>.seeded('');
+  final _loadingController = BehaviorSubject<bool>.seeded(false);
 
 
   bool _endLoading = false;

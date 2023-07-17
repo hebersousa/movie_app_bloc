@@ -4,11 +4,11 @@ import 'package:movie_app_bloc/blocs/movies_bloc.dart';
 
 class ApplicationStateProvider extends InheritedWidget{
 
-  ImagesBloc _imagesBloc;
-  MoviesBloc _moviesBloc;
+  late ImagesBloc _imagesBloc;
+  late MoviesBloc _moviesBloc;
 
-  ApplicationStateProvider({Key key, Widget child})
-      : super(key: key, child: child){
+  ApplicationStateProvider({Key? key, Widget? child})
+      : super(key: key, child: child!){
 
     _imagesBloc = ImagesBloc();
     _moviesBloc = MoviesBloc();
@@ -19,9 +19,9 @@ class ApplicationStateProvider extends InheritedWidget{
   @override
   bool updateShouldNotify(_) => true;
 
-  static ApplicationStateProvider of(BuildContext context) {
-    return (context.inheritFromWidgetOfExactType(ApplicationStateProvider)
-    as ApplicationStateProvider);
+  static ApplicationStateProvider? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<ApplicationStateProvider>();
+
   }
 
 

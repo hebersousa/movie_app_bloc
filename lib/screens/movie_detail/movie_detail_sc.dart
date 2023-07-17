@@ -15,8 +15,8 @@ class MovieDetailScreen extends StatelessWidget{
 @override
 Widget build( BuildContext context){
 
-  ImagesBloc bloc = ApplicationStateProvider.of(context).imagesBloc;
-  bloc.loadData(movie.id);
+  ImagesBloc? bloc = ApplicationStateProvider.of(context)?.imagesBloc;
+  bloc?.loadData(movie.id);
   //bloc.setMovieId(movie.id);
 
   var imagemFundo = movie.backdrop_path!=null?Image.network(movie.backdrop_path):Container();
@@ -53,8 +53,8 @@ Widget build( BuildContext context){
 
   Future<Null> onrefresh() async{
 
-    ImagesBloc bloc = ApplicationStateProvider.of(context).imagesBloc;
-    await bloc.loadData(movie.id);
+    ImagesBloc? bloc = ApplicationStateProvider.of(context)?.imagesBloc;
+    await bloc?.loadData(movie.id);
   }
 
   return new Scaffold(

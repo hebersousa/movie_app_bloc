@@ -35,7 +35,7 @@ TextEditingController txtController = TextEditingController();
             border: InputBorder.none
         ),
         onChanged: (valor){
-          ApplicationStateProvider.of(context).moviesBloc.busca = valor;
+          ApplicationStateProvider.of(context)?.moviesBloc.busca = valor;
 
         },
       );
@@ -57,7 +57,7 @@ TextEditingController txtController = TextEditingController();
               onPressed: (){
               setState((){
                 txtController.text = '';
-                ApplicationStateProvider.of(context).moviesBloc.busca = '';
+                ApplicationStateProvider.of(context)?.moviesBloc.busca = '';
               });
               },)
           ],
@@ -81,10 +81,10 @@ TextEditingController txtController = TextEditingController();
   Widget buildProgressIndicatorStream(){
 
       return StreamBuilder<bool>(
-        stream: ApplicationStateProvider.of(context).moviesBloc.loadingStream,
+        stream: ApplicationStateProvider.of(context)?.moviesBloc.loadingStream,
         builder: (_, snapshot){
 
-          if(snapshot.hasData && snapshot.data)
+          if(snapshot.hasData && snapshot.data!)
               return Center(child: progressIndicator);
           else
             return Padding(padding: const EdgeInsets.all(10.0),);
@@ -98,7 +98,7 @@ TextEditingController txtController = TextEditingController();
   Widget buildResultsStream(){
 
     return StreamBuilder<List<Movie>>(
-      stream: ApplicationStateProvider.of(context).moviesBloc.moviesStream,
+      stream: ApplicationStateProvider.of(context)?.moviesBloc.moviesStream,
       builder: (_,snapshot){
 
         if(snapshot.hasError){
@@ -109,17 +109,17 @@ TextEditingController txtController = TextEditingController();
 
           return ListView.builder(
 
-            itemCount:  snapshot.data.length + 1,
+            itemCount:  snapshot.data!.length + 1,
             itemBuilder: (context, index) {
 
-              List<Movie> movies = snapshot.data;
+              List<Movie> movies = snapshot.data!;
 
               if(index < movies.length  ) {
                 return buildItem( movies[index] );
               }
               else
               {
-                ApplicationStateProvider.of(context).moviesBloc.loadMore();
+                ApplicationStateProvider.of(context)?.moviesBloc.loadMore();
                 return buildProgressIndicatorStream();
               }
 
@@ -141,7 +141,7 @@ TextEditingController txtController = TextEditingController();
        return new Column(
          children: <Widget>[
            ListTile(
-            title:Text(movie.title, style: TextStyle(color: Theme.of(context).accentColor)),
+            title:Text(movie.title, style: TextStyle(color: Theme.of(context).primaryColor)),
             leading: CachedNetworkImage(
                 imageUrl: "${movie.poster_path}",
                 width: 60.0,

@@ -9,7 +9,7 @@ class ImagesBloc {
 
   API _api = API();
 
-  final _imagesController = BehaviorSubject<List<String>>();
+  final _imagesController = BehaviorSubject<List<String>?>();
 
   final _idController = BehaviorSubject<int>();
 
@@ -26,7 +26,7 @@ class ImagesBloc {
 
   // Recupera dados da stream
 
-  Stream<List<String>> get imagesStream => _imagesController.stream;
+  Stream<List<String>?> get imagesStream => _imagesController.stream;
 
 
   void setMovieId(int id){

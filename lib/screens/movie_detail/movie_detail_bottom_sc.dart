@@ -10,7 +10,7 @@ class MovieDetailBottomScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ImagesBloc bloc = ApplicationStateProvider.of(context).imagesBloc;
+    ImagesBloc? bloc = ApplicationStateProvider.of(context)?.imagesBloc;
 
     var iconPlaceHolder = Padding(
       padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 60.0),
@@ -25,13 +25,13 @@ class MovieDetailBottomScreen extends StatelessWidget {
       );
     }
 
-    return StreamBuilder<List<String>>(
-      stream: bloc.imagesStream,
+    return StreamBuilder<List<String>?>(
+      stream: bloc?.imagesStream,
       builder: (_, snapshot) {
         if (snapshot.hasData) {
             return ListView(
               scrollDirection: Axis.horizontal,
-              children: snapshot.data.map((url) => getImage(url)).toList());
+              children: snapshot.data?.map((url) => getImage(url)).toList() ?? []);
 
         } else if (snapshot.hasError) {
             return new Center(child: Text('SEM IMAGENS',style: TextStyle(color: Colors.brown[100]),));

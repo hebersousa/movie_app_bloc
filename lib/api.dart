@@ -14,8 +14,8 @@ class API {
   Future<List<Movie>> get(String query, int page) async{
 
     List<Movie> list = [];
-
-    await http.get("$urlQuery&query=$query&page=$page")
+    var uri =Uri.parse("$urlQuery&query=$query&page=$page");
+    await http.get(uri)
         .then( (res){
 
          Map result = json.decode(res.body);
@@ -31,7 +31,7 @@ class API {
 
   Future<List<String>> listImages(int idMovie) async{
 
-    var url = "${API_URL}movie/$idMovie/images?api_key=$API_KEY";
+    var url = Uri.parse("${API_URL}movie/$idMovie/images?api_key=$API_KEY");
 
     return await http.get(url).then( (res){
       Map map = json.decode(res.body);
